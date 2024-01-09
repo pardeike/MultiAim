@@ -1,7 +1,3 @@
-function startsWithCapital(str)
-	return string.match(str, '^[A-Z]') ~= nil
-end
-
 PlaceObj("XTemplate", {
 	group = "Shortcuts",
 	id = "BrrainzShortcuts",
