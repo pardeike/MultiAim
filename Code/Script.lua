@@ -3,14 +3,19 @@ local otherTurrets = {}
 local originalTargetAreaSet = TargetAreaObject.TargetAreaSet
 function TargetAreaObject:TargetAreaSet(area_state)
 	originalTargetAreaSet(self, area_state)
-	if #otherTurrets > 0 then
-		local center = area_state.pos
+	if #otherTurrets > 1 then
+		local center = otherTurrets[1].target_area_center
+		local radius = otherTurrets[1].target_area_radius
 		for i = 2, #otherTurrets do
 			local obj = otherTurrets[i]
-			obj.target_area_center = center
+			local newCenter = obj:TargetAreaClamp(center, obj.area_state)
+			obj.target_area_center = newCenter or obj.target_area_center
+			obj.target_area_radius = radius
 			obj:OnAttackTargetChanged()
 			obj:ShowRanges()
 		end
+		otherTurrets[1]:OnAttackTargetChanged()
+		otherTurrets[1]:ShowRanges()
 		otherTurrets = {}
 	end
 end
